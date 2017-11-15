@@ -7,7 +7,7 @@ import java.util.Random;
  * Created by rrodr on 11/11/2017.
  */
 
-class SearchTermRepository {
+public class SearchTermRepository {
 
     // Random number generator
     private Random rand;
@@ -54,7 +54,7 @@ class SearchTermRepository {
      * Returns a random search term
      * @return search term
      */
-    String getSearchTerm() {
+    public String getSearchTerm() {
         return searchKeywords[rand.nextInt(searchKeywords.length - 1)];
     }
 }

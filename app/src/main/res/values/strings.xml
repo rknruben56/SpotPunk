@@ -6,4 +6,7 @@
     <string name="button_pause">Pause</string>
     <string name="button_next">Song Sucks</string>
     <string name="button_add">Add this bad boy</string>
+    <string name="msg_add_song">Add Song</string>
+    <string name="msg_reject_song">Song sucks</string>
+    <string name="img_album">Album</string>
 </resources>

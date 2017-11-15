@@ -14,7 +14,7 @@ import kaaes.spotify.webapi.android.models.Track;
  * App Singleton
  * Created by rrodr on 11/10/2017.
  */
-class AppSingleton {
+public class AppSingleton {
 
     // ClientID used to talk to Spotify API
     private static final String CLIENT_ID = "87539cec4af546cfa0a9beccbbb92eae";
@@ -43,7 +43,7 @@ class AppSingleton {
      * Returns the singleton instance
      * @return
      */
-    static AppSingleton getInstance() {
+    public static AppSingleton getInstance() {
         return ourInstance;
     }
 
@@ -73,7 +73,7 @@ class AppSingleton {
      * Sets the Spotify Music Player
      * @param mPlayer
      */
-    public void setmPlayer(Player mPlayer) {
+    void setmPlayer(Player mPlayer) {
         this.mPlayer = mPlayer;
     }
 
@@ -81,7 +81,7 @@ class AppSingleton {
      * Gets the Current User's ID
      * @return currentUserID
      */
-    String getCurrentUserID() {
+    public String getCurrentUserID() {
         return currentUserID;
     }
 
@@ -89,7 +89,7 @@ class AppSingleton {
      * Updates the current user's ID stored
      * @param currentUserID
      */
-    void setCurrentUserID(String currentUserID) {
+    public void setCurrentUserID(String currentUserID) {
         this.currentUserID = currentUserID;
     }
 
@@ -97,7 +97,7 @@ class AppSingleton {
      * Returns the playList ID
      * @return playListID
      */
-    String getPlaylistID() {
+    public String getPlaylistID() {
         return playlistID;
     }
 
@@ -105,7 +105,7 @@ class AppSingleton {
      * Sets the playList ID
      * @param playlistID
      */
-    void setPlaylistID(String playlistID) {
+    public void setPlaylistID(String playlistID) {
         this.playlistID = playlistID;
     }
 
@@ -121,7 +121,7 @@ class AppSingleton {
      * Returns the Spotify Service
      * @return spotify service
      */
-    SpotifyService spotify() {
+    public SpotifyService spotify() {
         return service;
     }
 
@@ -129,7 +129,7 @@ class AppSingleton {
      * Get the Tracks object
      * @return TracksPager
      */
-    Queue<Track> getTracks() {
+    public Queue<Track> getTracks() {
         return tracks;
     }
 
@@ -137,7 +137,7 @@ class AppSingleton {
      * Sets the Tracks object
      * @param tracks
      */
-    void setTracks(List<Track> tracks) {
+    public void setTracks(List<Track> tracks) {
         this.tracks.addAll(tracks);
     }
 }
