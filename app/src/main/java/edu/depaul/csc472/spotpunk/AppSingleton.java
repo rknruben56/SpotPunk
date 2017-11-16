@@ -2,6 +2,7 @@ package edu.depaul.csc472.spotpunk;
 
 import com.spotify.sdk.android.player.Player;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -16,8 +17,13 @@ import kaaes.spotify.webapi.android.models.Track;
  */
 public class AppSingleton {
 
+    public enum APP_SCREEN { Main, Playlist, RejectList, Splash }
+
     // ClientID used to talk to Spotify API
     private static final String CLIENT_ID = "87539cec4af546cfa0a9beccbbb92eae";
+
+    // Request code used to verify the login GET/POST requests
+    private static final int REQUEST_CODE = 1337;
 
     // Spotify service that makes API calls
     private SpotifyService service;
@@ -40,6 +46,16 @@ public class AppSingleton {
     private Player mPlayer;
 
     /**
+     * List of reject tracks
+     */
+    private ArrayList<Track> rejectList;
+
+    /**
+     * Current track
+     */
+    private Track currentTrack;
+
+    /**
      * Returns the singleton instance
      * @return
      */
@@ -49,6 +65,7 @@ public class AppSingleton {
 
     private AppSingleton() {
         tracks = new LinkedList<>();
+        rejectList = new ArrayList<>();
     }
 
     /**
@@ -59,6 +76,54 @@ public class AppSingleton {
         SpotifyApi api = new SpotifyApi();
         api.setAccessToken(accessToken);
         service = api.getService();
+    }
+
+    /**
+     * Gets the current track
+     * @return
+     */
+    public Track getCurrentTrack() {
+        return currentTrack;
+    }
+
+    /**
+     * Sets the current track
+     * @param currentTrack
+     */
+    public void setCurrentTrack(Track currentTrack) {
+        this.currentTrack = currentTrack;
+    }
+
+    /**
+     * returns the list of reject tracks
+     * @return
+     */
+    public ArrayList<Track> getRejectList() {
+        return rejectList;
+    }
+
+    /**
+     * Updates the reject list with the current track
+     */
+    void updateRejectList(){
+        currentTrack = tracks.poll();
+        rejectList.add(currentTrack);
+    }
+
+    /**
+     * Returns the proper track to add to a Playlist
+     * @return
+     */
+    public Track getTrackToAdd() {
+        return tracks.poll();
+    }
+
+    /**
+     * Returns the request code
+     * @return
+     */
+    public static int getRequestCode() {
+        return REQUEST_CODE;
     }
 
     /**
@@ -113,7 +178,7 @@ public class AppSingleton {
      * Returns the CLIENT ID used to communicate with Spotify
      * @return client ID string
      */
-    String getClientId() {
+    public String getClientId() {
         return CLIENT_ID;
     }
 

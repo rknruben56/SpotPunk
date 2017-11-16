@@ -9,4 +9,11 @@
     <string name="msg_add_song">Add Song</string>
     <string name="msg_reject_song">Song sucks</string>
     <string name="img_album">Album</string>
+    <string name="img_reject">Reject Song</string>
+    <string name="img_add">Add Song</string>
+    <string name="screen_main">Main</string>
+    <string name="screen_playlist">My Playlist</string>
+    <string name="screen_rejectList">Reject List</string>
+    <string name="open_drawer">Drawer Open</string>
+    <string name="closed_drawer">Drawer Closed</string>
 </resources>

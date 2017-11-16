@@ -17,6 +17,7 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 
 import java.util.StringJoiner;
 
+import edu.depaul.csc472.spotpunk.helpers.ITrackHelper;
 import edu.depaul.csc472.spotpunk.listeners.IPlaybackListener;
 import edu.depaul.csc472.spotpunk.listeners.IPlaylistListener;
 import edu.depaul.csc472.spotpunk.listeners.IUpdateTrackListener;
@@ -25,7 +26,9 @@ import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 
 /**
- * Track View Model for the card
+ * Track View Model for the card.
+ * NOTE: This code references examples from the Tinder Swipe
+ * example: https://blog.mindorks.com/android-tinder-swipe-view-example-3eca9b0d4794
  * Created by rrodr on 11/14/2017.
  */
 @Layout(R.layout.track_card_view)
@@ -52,18 +55,26 @@ class TrackCard {
     private IUpdateTrackListener updateTrackListener;
     private IPlaylistListener playlistListener;
 
+    private ITrackHelper trackHelper;
+
+    private AppSingleton singleton;
+
     TrackCard(IPlaybackListener playbackListener,
               IUpdateTrackListener updateTrackListener,
               IPlaylistListener playlistListener,
+              ITrackHelper trackHelper,
               Context context,
               Track track,
               SwipePlaceHolderView swipeView) {
         this.playbackListener = playbackListener;
         this.updateTrackListener = updateTrackListener;
         this.playlistListener = playlistListener;
+        this.trackHelper = trackHelper;
         this.context = context;
         this.track = track;
         this.swipeView = swipeView;
+
+        singleton = AppSingleton.getInstance();
     }
 
     @Resolve
@@ -71,16 +82,10 @@ class TrackCard {
         // Get the album image
         Image image = track.album.images.get(0);
 
-        // Concat the list of artist strings
-        StringJoiner joiner = new StringJoiner(",");
-        for(ArtistSimple artist : track.artists) {
-            joiner.add(artist.name);
-        }
-
         // load UI contents to the card
         Glide.with(context).load(image.url).into(albumImageView);
         titleText.setText(track.name);
-        artistText.setText(joiner.toString());
+        artistText.setText(trackHelper.getArtists(track));
         playButton.setText(context.getString(R.string.button_pause));
 
         // Set the onClickListener for the play/pause button
@@ -99,6 +104,7 @@ class TrackCard {
 
     @SwipeOut
     private void onSwipedOut(){
+        singleton.updateRejectList();
         updateTrackListener.updateRandomTracks(true);
         swipeView.addView(this);
     }

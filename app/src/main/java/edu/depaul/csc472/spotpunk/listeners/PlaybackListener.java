@@ -32,8 +32,8 @@ public class PlaybackListener implements IPlaybackListener {
         } else {
             // have to get a new song and start playing
             if (playSong) {
-                Track currentSong = singleton.getTracks().poll();
-                singleton.getmPlayer().playUri(null, currentSong.uri, 0, 0);
+                singleton.setCurrentTrack(singleton.getTracks().peek());
+                singleton.getmPlayer().playUri(null, singleton.getCurrentTrack().uri, 0, 0);
             }
         }
     }

@@ -6,5 +6,5 @@ package edu.depaul.csc472.spotpunk.listeners;
  */
 
 public interface IUIListener {
-    void updateUI();
+    void updateUI(boolean getFreshTraskList);
 }

@@ -1,8 +1,9 @@
 package edu.depaul.csc472.spotpunk;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -13,6 +14,9 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import edu.depaul.csc472.spotpunk.helpers.ITrackHelper;
+import edu.depaul.csc472.spotpunk.helpers.NavDrawerHelper;
+import edu.depaul.csc472.spotpunk.helpers.TrackHelper;
 import edu.depaul.csc472.spotpunk.listeners.IPlaybackListener;
 import edu.depaul.csc472.spotpunk.listeners.IPlaylistListener;
 import edu.depaul.csc472.spotpunk.listeners.IUpdateTrackListener;
@@ -22,7 +26,7 @@ import edu.depaul.csc472.spotpunk.listeners.PlaylistListener;
 import edu.depaul.csc472.spotpunk.listeners.UpdateTrackListener;
 import kaaes.spotify.webapi.android.models.Track;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, IUIListener {
 
     /**
@@ -63,6 +67,11 @@ public class MainActivity extends Activity implements
      */
     private IPlaylistListener playlistListener;
 
+    /**
+     * Helper for Tracks
+     */
+    private ITrackHelper trackHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +79,41 @@ public class MainActivity extends Activity implements
 
         singleton = AppSingleton.getInstance();
 
+        trackHelper = new TrackHelper();
+
+        // Initialize the navigation drawer
+        initializeNavDrawer();
+
         // Initialize the Swipe view and animation objects
+        initializeSwipeView();
+
+        // Set up listeners for playback and spotify
+        initializeListeners();
+
+        Intent intent = getIntent();
+
+        // Setup the music player notification callback
+        singleton.getmPlayer().addNotificationCallback(MainActivity.this);
+
+        if (intent != null &&
+                intent.getSerializableExtra("Source") == AppSingleton.APP_SCREEN.Splash) {
+            // Get the initial set of random tracks
+            updateTrackListener.updateRandomTracks(true);
+        } else {
+            updateUI(false);
+        }
+    }
+
+    private void initializeNavDrawer() {
+        NavDrawerHelper drawerHelper = new NavDrawerHelper(this,
+                findViewById(R.id.drawerView),
+                findViewById(R.id.drawerLayoutMain),
+                findViewById(R.id.toolbarMain),
+                AppSingleton.APP_SCREEN.Main);
+        drawerHelper.setupNavDrawer();
+    }
+
+    private void initializeSwipeView() {
         swipeView = findViewById(R.id.swipeView);
         context = getApplicationContext();
 
@@ -81,18 +124,13 @@ public class MainActivity extends Activity implements
                         .setRelativeScale(0.01f)
                         .setSwipeInMsgLayoutId(R.layout.swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.swipe_out_msg_view));
+    }
 
-        // Set up listeners
+    private void initializeListeners() {
         playbackListener = new PlaybackListener(null);
         updateTrackListener = new UpdateTrackListener(playbackListener,
                 new SearchTermRepository(), this);
         playlistListener = new PlaylistListener(updateTrackListener, MainActivity.this);
-
-        // Setup the music player notification callback
-        singleton.getmPlayer().addNotificationCallback(MainActivity.this);
-
-        // Get the initial set of random tracks
-        updateTrackListener.updateRandomTracks(false);
     }
 
     @Override
@@ -118,38 +156,40 @@ public class MainActivity extends Activity implements
     }
 
     /**
-     * Gets the next track to display
-     *
-     * @param view next button
+     * Updates the list of track cards
      */
-    public void onRejectButtonClicked(View view) {
-        swipeView.doSwipe(false);
-    }
-
-    /**
-     * Updates the list of track cards 
-     */
-    public void updateUI() {
+    public void updateUI(boolean getFreshTrackList) {
         Log.d("MainActivity", "Updating UI!");
         boolean isInitialized = isInitialized();
 
-        // Remove any strangling songs
-        swipeView.removeAllViews();
+        if (getFreshTrackList) {
+            // Remove any strangling songs
+            swipeView.removeAllViews();
+        }
 
         // Enable any widgets as necessary
         for (int id : REQUIRES_INITIALIZED_STATE) {
             findViewById(id).setEnabled(isInitialized);
         }
 
-        // add new Track cards
+        // add Track cards
         for(Track track : singleton.getTracks()) {
             swipeView.addView(new TrackCard(playbackListener, updateTrackListener,
-                    playlistListener, context, track, swipeView));
+                    playlistListener, trackHelper, context, track, swipeView));
         }
     }
 
     private boolean isInitialized() {
         return singleton.getmPlayer() != null;
+    }
+
+    /**
+     * Gets the next track to display
+     *
+     * @param view next button
+     */
+    public void onRejectButtonClick(View view) {
+        swipeView.doSwipe(false);
     }
 
     /**
@@ -159,4 +199,5 @@ public class MainActivity extends Activity implements
     public void onAddButtonClick(View view) {
         swipeView.doSwipe(true);
     }
+
 }

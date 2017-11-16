@@ -92,7 +92,7 @@ public class PlaylistListener implements IPlaylistListener {
         String userID = singleton.getCurrentUserID();
         String playlistID = singleton.getPlaylistID();
         Map<String, Object> playlistOptions = new HashMap<>();
-        String[] songs = {singleton.getTracks().peek().uri};
+        String[] songs = {singleton.getTrackToAdd().uri};
         playlistOptions.put("uris", songs);
         singleton.spotify().addTracksToPlaylist(userID, playlistID, null, playlistOptions, new Callback<Pager<PlaylistTrack>>() {
 

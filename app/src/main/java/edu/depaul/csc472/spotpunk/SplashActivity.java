@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
@@ -14,11 +13,15 @@ import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import edu.depaul.csc472.spotpunk.tasks.LoginTask;
+
+/**
+ * Main App Launcher activity.
+ * NOTE: Login code was taken from the Spotify SDK
+ * tutorial: https://developer.spotify.com/technologies/spotify-android-sdk/tutorial/
+ */
 public class SplashActivity extends Activity implements
         ConnectionStateCallback {
-
-    private static final int REQUEST_CODE = 1337;
-    private static final String REDIRECT_URI = "testschema://callback";
 
     /**
      * Singleton object containing shared data
@@ -33,12 +36,7 @@ public class SplashActivity extends Activity implements
         singleton = AppSingleton.getInstance();
 
         // Login
-        AuthenticationRequest.Builder builder =
-                new AuthenticationRequest.Builder(singleton.getClientId(), AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "user-read-birthdate", "user-read-email", "streaming", "playlist-modify-public"});
-        AuthenticationRequest request = builder.build();
-
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        new LoginTask().execute(this);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class SplashActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, intent);
 
         // Check if the result comes from the correct activity
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == AppSingleton.getRequestCode()) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 // Initialize the main Spotify service
@@ -77,6 +75,7 @@ public class SplashActivity extends Activity implements
     public void onLoggedIn() {
         // Once the user is logged in, go to the main page
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        intent.putExtra("Source", AppSingleton.APP_SCREEN.Splash);
         startActivity(intent);
     }
 

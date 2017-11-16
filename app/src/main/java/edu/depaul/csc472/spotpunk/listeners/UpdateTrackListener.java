@@ -63,7 +63,7 @@ public class UpdateTrackListener implements IUpdateTrackListener {
             public void success(TracksPager tracksPager, Response response) {
                 List<Track> tracks = tracksPager.tracks.items;
                 singleton.setTracks(tracks);
-                uiListener.updateUI();
+                uiListener.updateUI(true);
                 playbackListener.updatePlaybackState(true, startPlaying);
             }
 
