@@ -1,6 +1,7 @@
 package edu.depaul.csc472.spotpunk.listeners;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -36,8 +37,8 @@ public class PlaylistListener implements IPlaylistListener {
     public void addTrackToPlaylist() {
         // Get the Current user's info
         String userID = singleton.getCurrentUserID();
+        // If userID is null, have to fetch it from the server and continue the process from there
         if (userID == null) {
-            // have to fetch it from the server and continue the process from there
             getUser();
             return;
         }
@@ -56,6 +57,7 @@ public class PlaylistListener implements IPlaylistListener {
             @Override
             public void success(UserPrivate userPrivate, Response response) {
                 singleton.setCurrentUserID(userPrivate.id);
+                // If there's no playlist, have to create one
                 if (singleton.getPlaylistID() == null) {
                     createPlaylist();
                 } else {
@@ -65,12 +67,13 @@ public class PlaylistListener implements IPlaylistListener {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
+                Log.d("PlaylistListener", "Error getting user from Spotify");
             }
         });
     }
 
     private void createPlaylist() {
+        // set the POST options
         Map<String, Object> options = new HashMap<>();
         options.put("name", "SpotPunk Playlist");
         options.put("public", true);
@@ -83,28 +86,34 @@ public class PlaylistListener implements IPlaylistListener {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
+                Log.d("PlaylistListener", "Error creating a playlist");
             }
         });
     }
 
     private void addTrack() {
+        // Set User ID parameter
         String userID = singleton.getCurrentUserID();
+
+        // Set playlist ID parameter
         String playlistID = singleton.getPlaylistID();
+
+        // Set the other POST options
         Map<String, Object> playlistOptions = new HashMap<>();
         String[] songs = {singleton.getTrackToAdd().uri};
         playlistOptions.put("uris", songs);
+
         singleton.spotify().addTracksToPlaylist(userID, playlistID, null, playlistOptions, new Callback<Pager<PlaylistTrack>>() {
 
             @Override
             public void success(Pager<PlaylistTrack> playlistTrackPager, Response response) {
                 Toast.makeText(context, "Song added!", Toast.LENGTH_SHORT).show();
-                updateTrackListener.updateRandomTracks(true);
+                updateTrackListener.updateRandomTracks();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
+                Log.d("PlaylistListener", "Error adding a new track");
             }
         });
     }

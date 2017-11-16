@@ -1,5 +1,7 @@
 package edu.depaul.csc472.spotpunk.listeners;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +41,10 @@ public class UpdateTrackListener implements IUpdateTrackListener {
     }
 
     @Override
-    public void updateRandomTracks(boolean startPlaying) {
+    public void updateRandomTracks() {
         if (singleton.getTracks().size() <= REFRESH_RATE) {
             // running out of songs, fetch some new ones
-            getNewTracks(startPlaying);
+            getNewTracks(true);
             return;
         }
         playbackListener.updatePlaybackState(true, true);
@@ -69,7 +71,7 @@ public class UpdateTrackListener implements IUpdateTrackListener {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
+                Log.d("UpdateTrackListener", "Error getting new tracks");
             }
         });
     }

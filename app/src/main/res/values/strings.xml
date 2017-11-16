@@ -16,4 +16,5 @@
     <string name="screen_rejectList">Reject List</string>
     <string name="open_drawer">Drawer Open</string>
     <string name="closed_drawer">Drawer Closed</string>
+    <string name="playlist_name">SpotPunk Playlist</string>
 </resources>

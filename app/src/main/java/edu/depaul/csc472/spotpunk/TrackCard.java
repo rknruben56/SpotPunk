@@ -15,13 +15,10 @@ import com.mindorks.placeholderview.annotations.View;
 import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 
-import java.util.StringJoiner;
-
 import edu.depaul.csc472.spotpunk.helpers.ITrackHelper;
 import edu.depaul.csc472.spotpunk.listeners.IPlaybackListener;
 import edu.depaul.csc472.spotpunk.listeners.IPlaylistListener;
 import edu.depaul.csc472.spotpunk.listeners.IUpdateTrackListener;
-import kaaes.spotify.webapi.android.models.ArtistSimple;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 
@@ -105,7 +102,7 @@ class TrackCard {
     @SwipeOut
     private void onSwipedOut(){
         singleton.updateRejectList();
-        updateTrackListener.updateRandomTracks(true);
+        updateTrackListener.updateRandomTracks();
         swipeView.addView(this);
     }
 
@@ -115,7 +112,6 @@ class TrackCard {
     }
 
     private String getPlayButtonText() {
-        Log.d("TrackCard", "getting play text");
         if (playbackListener.getPlaybackState() == null) {
             return context.getString(R.string.button_play);
         }

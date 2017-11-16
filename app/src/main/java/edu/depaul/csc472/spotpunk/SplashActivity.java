@@ -17,7 +17,7 @@ import edu.depaul.csc472.spotpunk.tasks.LoginTask;
 
 /**
  * Main App Launcher activity.
- * NOTE: Login code was taken from the Spotify SDK
+ * NOTE: Login code follows the example from the Spotify SDK site
  * tutorial: https://developer.spotify.com/technologies/spotify-android-sdk/tutorial/
  */
 public class SplashActivity extends Activity implements

@@ -1,7 +1,7 @@
 package edu.depaul.csc472.spotpunk.listeners;
 
 /**
- * Contract to handle the Spotify playlist
+ * Contract to handle adding tracks to the Spotify playlist
  * Created by rrodr on 11/15/2017.
  */
 

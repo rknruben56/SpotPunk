@@ -31,8 +31,10 @@ public class TrackAdapter extends ArrayAdapter<Track> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the track
         Track track = getItem(position);
+
+        // Inflate the layout
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.reject_list_item, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.track_list_item, null);
         }
         // Get UI elements to update
         TextView trackName = convertView.findViewById(R.id.trackName);
@@ -41,7 +43,7 @@ public class TrackAdapter extends ArrayAdapter<Track> {
         // Set the text accordingly
         trackName.setText(track.name);
         trackArtist.setText(trackHelper.getArtists(track));
-        
+
         return convertView;
     }
 }

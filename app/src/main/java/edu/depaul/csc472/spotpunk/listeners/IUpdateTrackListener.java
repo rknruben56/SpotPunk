@@ -6,5 +6,5 @@ package edu.depaul.csc472.spotpunk.listeners;
  */
 
 public interface IUpdateTrackListener {
-    void updateRandomTracks(boolean startPlaying);
+    void updateRandomTracks();
 }

@@ -17,6 +17,7 @@ import kaaes.spotify.webapi.android.models.Track;
  */
 public class AppSingleton {
 
+    // Different screens across the app
     public enum APP_SCREEN { Main, Playlist, RejectList, Splash }
 
     // ClientID used to talk to Spotify API
@@ -37,22 +38,16 @@ public class AppSingleton {
     // singleton instance
     private static final AppSingleton ourInstance = new AppSingleton();
 
-    // TracksPager containing tracks
+    // Queue containing tracks
     private Queue<Track> tracks;
 
-    /**
-     * Music player from Spotify SDK
-     */
+    // Music player from Spotify SDK
     private Player mPlayer;
 
-    /**
-     * List of reject tracks
-     */
+    // List of reject tracks
     private ArrayList<Track> rejectList;
 
-    /**
-     * Current track
-     */
+    // Current track
     private Track currentTrack;
 
     /**

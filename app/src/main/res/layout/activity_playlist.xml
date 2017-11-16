@@ -4,7 +4,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.depaul.csc472.spotpunk.RejectListActivity">
+    tools:context="edu.depaul.csc472.spotpunk.PlaylistActivity">
     <FrameLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:id="@+id/toolbarLayout"
             layout="@layout/toolbar"/>
         <ListView
-            android:id="@+id/rejectListView"
+            android:id="@+id/playlistView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"/>

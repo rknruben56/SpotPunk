@@ -43,7 +43,18 @@ public class SearchTermRepository {
             "panic",
             "moon",
             "alive",
-            "dead"
+            "dead",
+            "hero",
+            "villain",
+            "time",
+            "clock",
+            "sit",
+            "run",
+            "stand",
+            "fall",
+            "energy",
+            "french",
+            "myself"
     };
 
     SearchTermRepository() {
